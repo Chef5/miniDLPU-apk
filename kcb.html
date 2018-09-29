@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<script src="js/jquery-3.2.1.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			th{
+				width: 20%;
+				color: white;
+				height: 36px;
+				padding-top: 10px;
+				padding-bottom: 0px;
+				line-height: 0px;
+				border-bottom: #efeff4 10px solid;
+				/*background-color: #2AC845;*/
+				background-color: #ACACB4;
+			}
+			.showtime{
+				display: block;
+				position: relative;
+				font-size: 9px;
+				margin-top: 13px;
+				font-weight: normal;
+			}
+			td{
+				width: 20%;
+				margin: 10px;
+				border-right: 5px #efeff4 solid;
+				border-top: 5px #efeff4 solid;
+			}
+			.firstTh,.firstTd{
+				width: 1px;
+				color: black;
+				text-align: center;
+				font-size: 10px;
+				border: 0px #efeff4 solid;
+				padding: 0px;
+				margin: 0px;
+				background-color: #efeff4;
+			}
+			select{
+				width:auto;
+				background-color: #efeff4;
+			}
+			#kcb-box{
+				width: 97%;
+				height: 300px;
+				margin-right: 4%;
+				background-color: #efeff4;
+			}
+			#divcon{
+				width: 100%;
+				height: 300px;
+				margin-left: 2%;
+				background-color: white;
+			}
+			.emptyTd{
+				background-color: #efeff4;
+			}
+			.td1{
+				/*background-color: #9370DB;*/
+				background-color: rgba(72,61,139,0.6);
+			}
+			.td2{
+				/*background-color: #32CD32;*/
+				background-color: rgba(100,149,237,0.8);
+			}
+			.td3{
+				/*background-color: #8B8682;*/
+				background-color: rgba(0,139,139,0.6);
+			}
+			.td4{
+				/*background-color: #FFD700;*/
+				background-color: rgba(216,191,216,0.9);
+			}
+			.td5{
+				/*background-color: #1E90FF;*/
+				background-color: rgba(106,96,205,0.5);
+			}
+			.td6{
+				/*background-color: #FF4500;*/
+				background-color: rgba(240,128,128,0.6);
+			}
+			.td7{
+				/*background-color: #FF00FF;*/
+				background-color: rgba(210,180,140,0.7);
+			}
+			.td8{
+				background-color: rgba(144,238,144,0.9);
+			}
+			.td9{
+				background-color: rgba(255,165,0,0.4);
+			}
+			.td10{
+				background-color: rgba(0,206,209,0.5);
+			}
+			.flip-container {
+		    -webkit-perspective: 500;
+		    -moz-perspective: 500;
+		    -ms-perspective: 500;
+		    perspective: 500;
+		    -ms-transform: perspective(500px);
+		    -moz-transform: perspective(500px); /*重要*/
+		    transform-style: preserve-3d; /*重要*/
+		}
+		.flipper{
+		    position: relative;
+		    height: 95px;
+		   	width: 100%;
+		    transition: 0.6s;
+		    transform-style: preserve-3d; /*重要*/
+		}
+		/* 触发翻转 */
+		.flip-container:hover .flipper{
+		    height: 95px;
+		   	width: 100%;
+		    transform: rotateX(180deg);
+			-moz-transform:rotateX(180deg);  
+		}
+		/*.turnon{
+			height: 95px;
+		   	width: 100%;
+		    transform: rotateX(180deg);
+			-moz-transform:rotateX(180deg); 
+		}
+		.turnoff{
+			height: 95px;
+		   	width: 100%;
+		    transform: rotateX(180deg);
+			-moz-transform:rotateX(180deg); 
+		}*/
+		.front ,.back{
+		    position: absolute;
+		    backface-visibility: hidden;  /*重要*/
+		    height: 95px;
+		   	width: 100%;
+			text-align: center;
+			color: white;
+		}
+		.front {
+			padding: 5px;
+			font-size: 13px;
+		    transform: rotateX(0deg);
+		    -moz-transform:rotateX(0deg);     /* Firefox */
+		}
+		.backsmile{
+			display: table;
+		}
+		.backsmile span{
+			display: table-cell;
+            vertical-align: middle;
+		}
+		.back {
+			padding-right: 3px;
+			padding-left: 3px;
+			padding-top: 8px;
+			font-size: 12px;
+			line-height: 14px;
+		    transform: rotateX(180deg);
+		    -moz-transform:rotateX(180deg);     /* Firefox */
+		    background: green;
+		}
+		.tdtime{
+			position:absolute; 
+			bottom: 0px;
+			padding-bottom: 5px;
+			font-size: 10px;
+		}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">课程表</h1>
+		</header>
+		<div class="mui-content">
+			<div style="margin-top: 10px;margin-left: 10px;">
+				<div>
+					学期：
+					<select name='xq' id="xq" onchange="refresh()" style="margin-left: -10px;">
+						<option>2015-2016-1</option>
+						<option>2015-2016-2</option>
+						<option>2016-2017-1</option>
+						<option>2016-2017-2</option>
+						<option>2017-2018-1</option>
+						<option>2017-2018-2</option>
+						<option selected="selected">2018-2019-1</option>
+						<option>2018-2019-2</option>
+					</select>
+					周次：
+					<select name='zc' id="zc"  onchange="refresh()">
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>
+						<option>6</option>
+						<option>7</option>
+						<option>8</option>
+						<option>9</option>
+						<option>10</option>
+						<option>11</option>
+						<option>12</option>
+						<option>13</option>
+						<option>14</option>
+						<option>15</option>
+						<option>16</option>
+						<option>17</option>
+						<option>18</option>
+						<option>19</option>
+						<option>20</option>
+					</select>
+				</div>
+				<div style="border: 0px solid saddlebrown;width: 100px;height:40px;float: right;margin-top: -55px;margin-right: 1px;">
+					<p style="font-size: 14px; line-height: 12px;word-spacing: -4px;color: gray;" align="center">
+						<span class="weather-img"></span><br>
+						<span class="weather-info"></span>
+				</div>
+			</div>
+			<div id="kcb-box">
+				<div id="divcon">
+						
+				</div>
+			</div>
+		</div>
+		<script>
+			var loading = '<div id="divcon"><p style="text-align: center;"><img src="images/loadcj.gif" width="60%"/><br><font>课程表加载中...</font></p><p style="text-align: center;">超过5秒都加载不出来，切换一下服务器试试</p></div>';
+			var notCources = '<div id="divcon"><p style="text-align: center;"><img src="images/notcource.gif" width="60%"/><br><font style="font-size: 16px;">这周啥课也没有...</font></p></div>'
+			var loaderror = '<div id="divcon"><p style="text-align: center;"><img src="images/sad.gif" width="50%"/><br><font>课程表加载失败了(&gt;﹏&lt;)</font><br><h5 style="padding-left: 15%;padding-right: 15%;">请检查：<span style="color: lightskyblue;">设置-&gt;教务处信息更改</span>中所储存在本地的学号和密码是否错误</h5></p><p align="center">再多<span style="color: lightcoral;">下拉刷新</span>几下试试</p></div>';
+			var itemFirstDay = 0;	
+			mui.init({
+				pullRefresh:{
+			    container:"#kcb-box",
+			    down : {
+			      style:'circle',//必选，下拉刷新样式，目前支持原生5+ ‘circle’ 样式
+			      color:'#2BD009', //可选，默认“#2BD009” 下拉刷新控件颜色
+			      height:'50px',//可选,默认50px.下拉刷新控件的高度,
+			      range:'100px', //可选 默认100px,控件可下拉拖拽的范围
+			      offset:'45px', //可选 默认0px,下拉刷新控件的起始位置
+			      auto: true,//可选,默认false.首次加载自动上拉刷新一次
+			      callback :refresh
+			    	}
+			 	}
+			});
+			mui.plusReady(function() {
+				var Id = localStorage.getItem("userid"); 
+				var Pwd = localStorage.getItem("userpwd"); 
+				var Server = localStorage.getItem("server");
+		        if(Id == null) 
+		        { 
+		            mui.alert('本地不存在教务处账号和密码，请转到:设置>教务处信息更改');
+					$("#kcb-box").empty();
+					$('#kcb-box').append(loaderror);
+		        }
+		        //获取开学和放假日期，计算当前周
+		        $.ajax({
+		        	type:"get",
+					url:"https://test.1zdz.cn/kcb/getdate.php",
+	                success: function(data){
+	                	var dat = JSON.parse(data);
+	                	itemFirstDay = dat.itemStart;
+	                	//当前学期设置
+	                	$("#xq option").each(function(){
+				            var ite = $(this).val();
+				            if(ite==dat.nowItem){
+				                $(this).attr("selected","selected");
+				            }else{
+				                $(this).removeAttr("selected");
+				            }
+					    });
+	                	//当前周次设置
+	                	var nowtime = new Date();  //当前时间
+	                	var nowtimestamp = Date.parse(nowtime);  //当前时间的时间戳（毫秒）最后三位000
+	                	var day = ((nowtimestamp/1000-dat.itemStart)/86400); //与开学时间的时间差（天）
+	                	var nowzc = Math.ceil(day/7); //向上取整
+	                	if(nowzc>20)nowzc = 20;
+	                	else if(nowzc<0)nowzc = 1;
+	                	$("#zc option").each(function(){
+				            var week = $(this).val();
+				            if(parseInt(week)==nowzc){
+				                $(this).attr("selected","selected");
+				            }else{
+				                $(this).removeAttr("selected");
+				            }
+					    });
+					    if(dat.weatherimg1!=null&&dat.weatherinfo!=null){
+					    	if(dat.weatherMODE == "inhr"){
+					    		var weatherimg = '<img src="'+dat.weatherimg1+'" width="25px;"/>';
+					    		if(dat.weatherimg2!=null)weatherimg += '<img src="'+dat.weatherimg2+'" width="25px;"/>';
+						    	var weatherinfo = dat.weatherinfo+"℃";
+					    	}else{
+					    		var weatherimg = '<img src="images/weather/'+dat.weatherimg1+'.png" width="25px;"/>';
+					    		if(dat.weatherimg2!=null)weatherimg += '<img src="images/weather/'+dat.weatherimg2+'.png" width="25px;"/>';
+						    	var weatherinfo = dat.weatherinfo+"℃";
+					    	}
+						    $('.weather-img').html(weatherimg);
+						    $('.weather-info').html(weatherinfo);
+					    }		        	},error:function(){
+	                	plus.nativeUI.toast('自动设置学期、周次失败！') ;
+			        }
+		        });
+			});
+			function isNotEmpty(str){
+				if(str==""){
+					return false;
+				}
+				else return true;
+			};
+			function isOver16(str){
+				if(str.length>16){
+					return str.substring(0,15)+"...";
+				}
+				else return str;
+			};
+			function isOver12(str){
+				if(str.length>12){
+					return str.substring(0,11)+"...";
+				}
+				else return str;
+			};
+			//生成随机数
+			function RandomNumBoth(Min,Max){
+		        var Range = Max - Min;
+		        var Rand = Math.random();
+		        var num = Min + Math.round(Rand * Range); //四舍五入
+		        return num;
+			}
+			//翻转效果
+			/*function turn(){
+				$(".flipper").click(function(){
+					if($(this).parent().attr("val")=="hidden"){
+						$(this).parent().attr("val","show");
+						$(this).parent().addClass("turnon");  
+						$(this).addClass("turnon"); 
+						return;
+					}
+					if($(this).parent().attr("val")=="show"){
+						$(this).parent().attr("val","hidden");
+						$(this).parent().addClass("turnoff");
+						$(this).addClass("turnoff"); 
+						return; 
+					}
+				});
+			}*/
+			function refresh(){
+				//计算当前选择周1至周5日期
+			    var selzc = $('#zc').select().val();
+			    var everyMonday = (selzc-1)*7; //周次x7,获取没周一距离开学那天的天数
+			    var itemF = new Date(itemFirstDay * 1000);
+		        var YearY = itemF.getFullYear();
+		        var MonthM = itemF.getMonth()+1 < 10 ? '0'+(itemF.getMonth()+1) : itemF.getMonth()+1;
+		        var DayD = itemF.getDate();
+            	var firstDayTime = new Date(YearY+"-"+MonthM+"-"+DayD+" 00:00:00");
+            	var firstDayTime = firstDayTime.valueOf();
+            	var toDisplayTime = new Array();
+            	for(var i=0;i<5;i++){
+            		var nextDate = new Date(firstDayTime + (everyMonday+i)*24*60*60*1000); //后一天
+            		var nextMonth = nextDate.getMonth()+1 < 10 ? '0'+(nextDate.getMonth()+1) : nextDate.getMonth()+1;
+		        	var nextDay = nextDate.getDate() < 10 ? '0'+nextDate.getDate() : nextDate.getDate();
+		        	toDisplayTime[i] = nextMonth+"."+nextDay;
+		        	//console.log("time:"+toDisplayTime);
+		        	//var showWhere = ".showtime"+i;
+		        	//$(".showtime").html(toDisplayTime);
+            	}
+				var Id = localStorage.getItem("userid"); 
+				var Pwd = localStorage.getItem("userpwd"); 
+				var Server = localStorage.getItem("server");
+				var Pwdl1 = Math.floor(Pwd.length/2);
+				var Pwdl2 = Pwd.length-Pwdl1;
+				var Pwd1 = Pwd.substr(0,Pwdl1);
+				var Pwd2 = Pwd.substr(Pwdl1,Pwdl2);
+				var WannaKey = ((parseInt(Id)+17323)*3)+"18940291284Jkn2mK5jN,?jb6w520er12"+Pwd1+"mlYu81sn.*h0koat520"+Pwd2+"kJKS1423UnJihiv13JHG123nkKH4bIyiuvmUYFGY1998";
+				WannaKey = window.btoa(WannaKey);
+		        if(Id == null) 
+		        { 
+		        	mui("#kcb-box").pullRefresh().endPulldown();
+		            mui.alert('本地不存在教务处账号和密码，请转到:设置>教务处信息更改');
+		            return ;
+		        } 
+				var items = $('#xq').select().val();
+				var weeks = $('#zc').select().val();
+				/*items = "2018-2019-1";
+				weeks = "1";*/
+				$("#kcb-box").empty();
+				$('#kcb-box').append(loading);
+				$.ajax({
+					type:"post",
+					url:"https://test.1zdz.cn/kcb/kcb.php",
+					data: {
+						/*id: Id,
+						pwd: Pwd,*/
+						XiangGanMa: WannaKey,
+	                    item: items,
+	                    week: weeks,
+	                    server: Server
+	                    },
+	                success: function(data){
+	                	$("#kcb-box").empty();
+	                	var dat = JSON.parse(data);
+	                	if(dat.state=="error"){
+							$("#kcb-box").append(loaderror);
+			            	mui('#kcb-box').pullRefresh().endPulldown();
+			            	return ;
+	                	}
+	                	var index = 1;
+			            for(var hang=0;hang<6;hang++){
+			                for(var i=0;i<5;i++){
+			                    if(dat[hang][i].name!="" && dat[hang][i].index == ""){
+			                    	var tmp_name = dat[hang][i].name;
+			                        for(var h=hang;h<6;h++){//向下搜寻相同课程，名称
+			                            for(var j=0;j<5;j++){
+			                                if(dat[h][j].name == tmp_name && dat[h][j].index == ""){
+			                                    dat[h][j].index = index;//标号
+			                                }
+			                            }
+			                        }
+			                        index++;
+			                    }
+			                }
+			            }
+			            var cnum = 7;
+	                	var isAllNot = 0;
+						var tdColor = new Array('td1','td2','td3','td4','td5','td6','td7','td8','td9','td10');
+						var tdContent = "<td class='firstTd'>1<br>2</td>";
+						var appendKCBcontent = "<table><tr><th class='firstTh'></th><th>周一<br><span class='showtime'>"+toDisplayTime[0]+"</span></th><th>周二<br><span class='showtime'>"+toDisplayTime[1]+"</span></th><th>周三<br><span class='showtime'>"+toDisplayTime[2]+"</span></th><th>周四<br><span class='showtime'>"+toDisplayTime[3]+"</span></th><th>周五<br><span class='showtime'>"+toDisplayTime[4]+"</span></th></tr>";
+						var tmpcolor = "";
+						var tmpname = "";
+						var tmproom = "";
+						var tmpleader = "";
+						var tmpsmile = "";
+						var smiles = dat.smilelen-1;
+						console.log(smiles);
+						var tmptime = "<div class='tdtime'>08:00~08:45<br/>08:55~09:40</div>";
+						for(hang=0;hang<5;hang++){
+		                	for(var i=0;i<5;i++){
+	                			tmpcolor = tdColor[dat[hang][i].index-1];
+	                			tmpname = isOver12(dat[hang][i].name);
+	                			tmproom = dat[hang][i].room;
+	                			tmpleader = isOver16(dat[hang][i].leader);
+		                		if(isNotEmpty(dat[hang][i].name)){
+		                			tdContent+=("<td><div class='flip-container' val='hidden'><div class='flipper'><div class='front "+tmpcolor+"'>"+tmpname+"<br>"+tmproom+"</div><div class='back'>"+tmpleader+tmptime+"</div></div></div></td>");
+		                		}else{
+		                			tmpsmile = dat.smile[RandomNumBoth(0,smiles)];
+		                			tdContent+=("<td><div class='flip-container' val='hidden'><div class='flipper backsmiletable'><div class='front'><br></div><div class='back backsmile'><span>"+tmpsmile+"</span></div></div></div></td>");
+		                			isAllNot++;
+		                		} 
+		                	}
+		                	appendKCBcontent += ("<tr>"+tdContent+"</tr>");
+		                	if(hang == 0){tdContent = "<td class='firstTd'>3<br>4</td>";tmptime = "<div class='tdtime'>10:05~10:50<br/>11:00~11:45</div>";}
+		                	if(hang == 1){tdContent = "<td class='firstTd'>5<br>6</td>";tmptime = "<div class='tdtime'>13:20~14:05<br/>14:10~14:55</div>";}
+		                	if(hang == 2){tdContent = "<td class='firstTd'>7<br>8</td>";tmptime = "<div class='tdtime'>15:15~16:00<br/>16:05~16:50</div>";}
+		                	if(hang == 3){tdContent = "<td class='firstTd'>9<br>10</td>";tmptime = "<div class='tdtime'>18:00~18:45<br/>18:55~19:40</div>";}
+						}
+						appendKCBcontent += "</table>";
+						if(isAllNot == 30){
+							$('#kcb-box').append(notCources);
+						}else{
+							$('#kcb-box').append(appendKCBcontent);
+						}
+	               },error:function(){
+	                	$("#kcb-box").empty();
+						$("#kcb-box").append(loaderror);
+			            mui('#kcb-box').pullRefresh().endPulldown();
+			        }
+				});
+				mui('#kcb-box').pullRefresh().endPulldown();
+			}
+		</script>
+	</body>
+</html>
+				

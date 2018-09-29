@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<script src="js/jquery-3.2.1.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			th,td{
+				width: 20%;
+			}
+			td{
+				height: 100px;
+				text-align: center;
+			}
+			select{
+				width:auto;
+				background-color: #efeff4;
+			}
+			#cj-box-container{
+				width: 96%;
+				height: 300px;
+				margin-left: 2%;
+				margin-right: 2%;
+				background-color: white;
+			}
+			.mui-table-view:before,.mui-table-view:after {
+				height: 0px;
+			}
+		</style>
+
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">个人成绩</h1>
+		</header>
+		<div class="mui-content">
+			<div style="margin-top: 10px;margin-left: 20px;">
+				学期：
+				<select name='xq' id="xq" onchange="refresh()">
+					<option>2015-2016-1</option>
+					<option>2015-2016-2</option>
+					<option>2016-2017-1</option>
+					<option>2016-2017-2</option>
+					<option>2017-2018-1</option>
+					<option>2017-2018-2</option>
+					<option>2018-2019-1</option>
+					<option>2018-2019-2</option>
+				</select>
+				<span style="font-size: 14px;color: #8f8f94;">&larr;点一下试试</span>
+			</div>
+			<div id="cj-box-container">
+				<ul class="mui-table-view" id="cj-box"> 
+					<div>
+						<p style="text-align: center;">
+							<img src="images/loadcj.gif" width="60%"/><br>
+							<font>成绩加载中...</font>
+						</p>
+					</div>
+		    	</ul>
+			</div>
+		</div>
+		<div class="mui-content-padded">
+			<p>没有更多了...</p>
+		</div>
+		
+		<script>
+			var loading = '<div><p style="text-align: center;"><img src="images/loadcj.gif" width="60%"/><br><font>成绩加载中...</font></p><p style="text-align: center;">超过5秒都加载不出来，切换一下服务器试试</p></div>';
+			var loaderror = '<div><p style="text-align: center;"><img src="images/sad.gif" width="50%"/><br><font>成绩加载失败了(&gt;﹏&lt;)</font><br><h5 style="padding-left: 15%;padding-right: 15%;">请检查：<span style="color: lightskyblue;">设置-&gt;教务处信息更改</span>中所储存在本地的学号和密码是否错误</h5></p><p align="center">再多<span style="color: lightcoral;">下拉刷新</span>几下试试</p></div>';
+			mui.init({
+				pullRefresh:{
+			    container:"#cj-box",
+			    down : {
+			      style:'circle',//必选，下拉刷新样式，目前支持原生5+ ‘circle’ 样式
+			      color:'#2BD009', //可选，默认“#2BD009” 下拉刷新控件颜色
+			      height:'50px',//可选,默认50px.下拉刷新控件的高度,
+			      range:'100px', //可选 默认100px,控件可下拉拖拽的范围
+			      offset:'45px', //可选 默认0px,下拉刷新控件的起始位置
+			      auto: true,//可选,默认false.首次加载自动上拉刷新一次
+			      callback :refresh
+			    	}
+			 	}
+			});
+			mui.plusReady(function() {
+				var Id = localStorage.getItem("userid"); 
+				var Pwd = localStorage.getItem("userpwd"); 
+				var Server = localStorage.getItem("server");
+		        if(Id == null) 
+		        { 
+					$("#cj-box").empty();
+					$("#cj-box").append(loaderror);
+		        } 
+		        $.ajax({
+		        	type:"get",
+					url:"https://test.1zdz.cn/kcb/getdate.php",
+	                success: function(data){
+	                	var dat = JSON.parse(data);
+	                	//当前成绩学期设置
+	                	$("#xq option").each(function(){
+				            var ite = $(this).val();
+				            if(ite==dat.cjItem){
+				                $(this).attr("selected","selected");
+				            }else{
+				                $(this).removeAttr("selected");
+				            }
+					    });
+					},error:function(){
+	                	plus.nativeUI.toast('自动设置学期失败！') ;
+			        }
+		        });
+			});
+			function isOver16(str){
+				if(str.length>16){
+					return str.substring(0,15)+"...";
+				}
+				else return str;
+			};
+			function refresh(){
+				var Id = localStorage.getItem("userid"); 
+				var Pwd = localStorage.getItem("userpwd");
+				var Server = localStorage.getItem("server"); 
+				var Pwdl1 = Math.floor(Pwd.length/2);
+				var Pwdl2 = Pwd.length-Pwdl1;
+				var Pwd1 = Pwd.substr(0,Pwdl1);
+				var Pwd2 = Pwd.substr(Pwdl1,Pwdl2);
+				var WannaKey = ((parseInt(Id)+17323)*3)+"18940291284Jkn2mK5jN,?jb6w520er12"+Pwd1+"mlYu81sn.*h0koat520"+Pwd2+"kJKS1423UnJihiv13JHG123nkKH4bIyiuvmUYFGY1998";
+				WannaKey = window.btoa(WannaKey);
+				if(Id == null) 
+		        { 
+		            mui("#cj-box").pullRefresh().endPulldown();
+		            mui.alert('本地不存在教务处账号和密码，请转到:设置>教务处信息更改');
+		            return ;
+		        } 
+				var items = $('#xq').select().val();
+				$("#cj-box").empty();
+				$('#cj-box').append(loading);
+				$.ajax({
+					type:"post",
+					url:"https://test.1zdz.cn/kcb/cj.php",
+					data: {
+						XiangGanMa: WannaKey,
+	                    item: items,
+	                    server: Server
+	                    },
+	                success: function(data){
+	                	$("#cj-box").empty();
+	                	var dat = JSON.parse(data);
+	                	if(dat.state=="error"){
+							$("#cj-box").append(loaderror);
+			            	mui('#cj-box').pullRefresh().endPulldown();
+			            	return ;
+	                	}
+	                	for(var i=0; i<dat.length; i++){
+	                		var appendContent = 
+	                			"<li class='mui-table-view-cell mui-collapse'>"+
+						            "<a class='mui-navigate-right' href='#'>"+
+						            	"<font style='display:inline-block;width: 78%;text-align: left;'>"+isOver16(dat[i].name)+"</font>"+
+						            	"<font style='display:inline-block;width: 16%;text-align: right;'>"+dat[i].grade+"</font>"+
+						            "</a>"+
+						            "<div class='mui-collapse-content'>"+
+						            	"<p>平时成绩(<font>"+dat[i].detail.pscjb+"</font>)："+dat[i].detail.pscj+"</p>"+
+						            	"<p>期末成绩(<font>"+dat[i].detail.qmcjb+"</font>)："+dat[i].detail.qmcj+"</p>"+
+						            	"<hr />"+
+						                "<p><font>学分："+dat[i].detail.credit+"</font>&nbsp;&nbsp;&nbsp;&nbsp;<font>绩点："+dat[i].detail.point+"</font></p>"+
+						                "<p>学时："+dat[i].detail.hour+"</p>"+
+						                "<p>考核方式："+dat[i].detail.method+"</p>"+
+						                "<p>课程属性："+dat[i].detail.kcsx+"</p>"+
+						                "<p>课程性质："+dat[i].detail.kcxz+"</p>"+
+						            "</div>"+
+						        "</li>";
+						    $('#cj-box').append(appendContent);
+	                	}
+	                },
+	                error:function(){
+	                	$("#cj-box").empty();
+						$("#cj-box").append(loaderror);
+			            mui('#cj-box').pullRefresh().endPulldown();
+			        }
+				});
+				mui("#cj-box").pullRefresh().endPulldown();
+			}
+		</script>
+	</body>
+</html>

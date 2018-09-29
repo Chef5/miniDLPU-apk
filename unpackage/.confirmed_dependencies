@@ -1,0 +1,24 @@
+{
+  "index.html": {
+    "resources": [
+      "a.html",
+      "page/kcb.html",
+      "kcb.html"
+    ],
+    "refer": [
+      "a.html",
+      "page/kcb.html",
+      "kcb.html",
+      "cj.html",
+      "setting.html",
+      "ksrc.html"
+    ]
+  },
+  "kcb.html": {
+    "resources": [
+      "images/weather/\u001aý.png",
+      "images/60x60.gif",
+      "images/weather/t.png"
+    ]
+  }
+}

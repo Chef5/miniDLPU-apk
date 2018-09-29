@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<script src="js/jquery-3.2.1.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			th,td{
+				width: 20%;
+			}
+			td{
+				height: 100px;
+				text-align: center;
+			}
+			select{
+				width:30%;
+			}
+			.mui-card-content p{
+				text-indent: 2em;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">设置</h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view"> 
+		        <li class="mui-table-view-cell mui-collapse">
+					<a class="mui-navigate-right" href="#">教务处信息更改</a>
+					<div class="mui-collapse-content">
+						<form class="mui-input-group">
+							<div class="mui-input-row">
+								<label>学号</label>
+								<input type="text" id="user-id" maxlength="10" placeholder="在此输入学号">
+							</div>
+							<div class="mui-input-row">
+								<label>密码</label>
+								<input type="text" id="user-pwd" maxlength="20" placeholder="教务处密码">
+							</div>
+							<div class="mui-button-row">
+								<button class="mui-btn mui-btn-primary" type="button" onclick="remPwd()">提交更改</button>
+							</div>
+						</form><br>
+						<p>教务处账号密码将用于抓取你账号在教务处的内容，且账号密码仅仅储存在你手机本地，本人也不会给任何人泄露你的账号和密码！</p>
+					</div>
+				</li>
+	    	</ul>
+	    	<ul class="mui-table-view"> 
+		        <li class="mui-table-view-cell mui-collapse">
+					<a class="mui-navigate-right" href="#">教务处服务器选择</a>
+					<div class="mui-collapse-content">
+						<form class="mui-input-group" onchange="renewServer()">
+							<div class="mui-input-row mui-radio">
+								<label>服务器1：<span style="color: lawngreen;">210.30.62.37</span><span></span>(默认)</label>
+								<input name="server" type="radio" value="210.30.62.37">
+							</div> 
+							<div class="mui-input-row mui-radio">
+								<label>服务器2：<span style="color: lawngreen;">210.30.62.38</span><span></span></label>
+								<input name="server" type="radio" value="210.30.62.38">
+							</div> 
+							<div class="mui-input-row mui-radio">
+								<label>服务器3：<span style="color: lawngreen;">210.30.62.39</span><span></span></label>
+								<input name="server" type="radio" value="210.30.62.39">
+							</div>  
+							<div class="mui-input-row mui-radio">
+								<label>服务器4：<span style="color: lawngreen;">210.30.62.40</span><span></span></label>
+								<input name="server" type="radio" value="210.30.62.40">
+							</div> 
+						</form><br>
+						<p>服务器不稳定时，一般刷新2-4次就能获取数据。</p>
+						<p>若一直刷不出来课表，可切换一下教务处服务器试试，也许是学校教务处某台服务器罢工了呢</p>
+					</div>
+				</li>
+	    	</ul>	
+	    	<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-collapse">
+		            <a class="mui-navigate-right" href="#">使用必知</a>
+		            <div class="mui-collapse-content">
+		                <div class="mui-card">
+							<!--内容区-->
+							<div class="mui-card-content" style="padding: 10px;">
+								<h4>一、关于本软件</h4>
+								<h5>1、原理</h5>
+								<p>软件主要通过你提供的学号和密码，通过curl模拟登录教务处，获取相应的网页数据，通过算法分析网页源码，提取关键数据后在此软件上展示。</p>
+								<p>此过程不保存用户数据，也就是你每次下拉刷新，就会提交一次你的学号和密码，去模拟教务处登陆。一般从模拟登陆到数据抓取再返回软件展示，用时大概1秒。</p>
+								<h5>2、学号和密码</h5>
+								<p>当第一次打开软件时，需要你设置学号和密码。你的学号和密码将永久的保存在你手机的缓存，直到你自己卸载本软件或清除软件数据，学号和密码才会被清除。</p>
+								<p>如果学号和密码信息不正确，将无法模拟登录获取教务处信息。因此在设置教务处信息里，本软件系统会直接明文显示你储存在本地的学号和密码，以便于你检查更改。</p>
+								<h5>3、使用范围</h5>
+								<p>本软件仅仅设计了大连工业大学教务处有关数据抓取的算法，其他学校暂时没有设计。因此本软件目前只适用于大连工业大学。</p>
+								<h4>二、免责声明</h4>
+								<p style="color: lightcoral;">本软件为个人使用方便和兴趣所做，坚持不接受任何广告，不向他人泄漏任何用户信息。</p>
+								<p>但也存在可能泄露用户信息的途径，如用户手机被他人查看、数据拦截、服务器遭遇黑客攻击等情况，可能导致用户信息泄露。因此在此申明：<span style="color: lightcoral;">本软件仅为分享使用，也没有任何盈利目的，若因使用本软件而导致用户信息泄露，本人概不负任何责任。</span></p>
+								<p>本人会尽自己最大努力保护用户信息，目前保护措施：（1）用户的学号和密码已加密处理后进行网络传输。</p>
+								<br>
+								<h4 style="color:red;font-size: 15px;">使用本软件即代表你已经阅读并同意以上条例</h4>
+							</div>
+						</div>
+		            </div>
+		        </li>
+			</ul>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-collapse">
+		            <a class="mui-navigate-right" href="#">意见反馈</a>
+		            <div class="mui-collapse-content">
+		                <div class="mui-card">
+							<!--页眉，放置标题-->
+							<div class="mui-card-header">
+								<div class="mui-card-header mui-card-media">
+									<img src="images/my.jpg" />
+									<div class="mui-media-body">
+										作者：Patrick Jun
+										<p>最后更新于 2018-08-15</p>
+									</div>
+								</div>
+							</div>
+							<!--内容区-->
+							<div class="mui-card-content" id="about-article">
+								<h5 align="center" style="font-size: 18px;">欢迎反馈bug或建议</h5>
+								<h5 align="center" style="font-size: 12px;">有什么功能改进、需求</h5>
+								<h5 align="center" style="font-size: 12px;">均可以告诉我</h5>
+								<h5 align="center" style="font-size: 12px;">我会尽自己所能满足大家</h5>
+								<div style="margin-top: 20px;text-align: center;">
+									<p align="center">微信公众号：<span style="color: lightskyblue;">dlpurunner</span>(工大夜跑团)</p>
+									<p style="font-size: 16px;">QQ:<font style="color: lightskyblue;">583195863</font>（枯艿）</p>
+									<p style="font-size: 16px;">微信:<font style="color: lightskyblue;">Kmitle</font>（Patrick Jun）</p>
+									<p style="font-size: 16px;">大学印象:<font style="color: lightskyblue;">吴俊</font>（16级）</p>
+								</div>
+								<h5 align="center" style="font-size: 12px;color: lightcoral;">有问题一定要告诉我啊</h5>
+							</div>
+							<!--页脚，放置补充信息或支持的操作-->
+							<div class="mui-card-footer">
+								<p>"一直都在"：https://www.1zdz.cn/</p>
+							</div>
+						</div>
+		            </div>
+		        </li>
+			</ul>
+			<button class="mui-btn mui-badge-blue" style="display:block; margin: 10px auto;" onclick="checkUpdate()">检查更新</button>		
+		</div>
+		<div id="displayinfo">
+			
+		</div>
+		<div style="position: relative;margin-bottom: 2px;margin-left: 10px;">
+			<p>Version <span id="wgtver">
+				2.4
+			</span></p>
+		</div>
+		
+		<script>
+			mui.init();
+			var Id = localStorage.getItem("userid"); 
+			var Pwd = localStorage.getItem("userpwd"); 
+			var Server = localStorage.getItem("server"); 
+			if(Server == null){
+				localStorage.setItem("server","210.30.62.37");
+				Server = "210.30.62.37";
+			}
+            if(Id != null) 
+            { 
+                document.getElementById("user-id").value = Id; 
+                document.getElementById("user-pwd").value = Pwd; 
+            }
+            //初始化服务器状态
+            $.ajax({
+	        	type:"get",
+				url:"https://test.1zdz.cn/kcb/getstate.php",
+                success: function(data){
+                	var dat = JSON.parse(data);
+                	var serverindex = 0;
+                	$("input[name=server]").each(function(){
+                		var setcolor = "";
+                		if(dat[serverindex]=="正常")setcolor = "#71C671";
+                		else if(dat[serverindex]=="不稳定")setcolor = "#EE9572";
+                		else setcolor = "#A6A6A6";
+			            $(this).prev().children('span').eq(1).text(" "+dat[serverindex]);
+			            $(this).prev().children('span').eq(1).css('color',setcolor);
+			            serverindex++;
+				    });
+				},error:function(){
+                	plus.nativeUI.toast('服务器状态获取失败！') ;
+		        }
+		    });
+	    	//进入就检查更新
+		    var wgtVer = parseFloat($('#wgtver').text());
+		    $.ajax({
+	        	type:"post",
+				url:"https://test.1zdz.cn/kcb/update/update.php",
+				data: {
+					ver: wgtVer,
+                    },
+                success: function(data){
+                	plus.nativeUI.closeWaiting();
+                	var dat = JSON.parse(data);
+	                if(parseInt(dat.code)==1){                           
+	                    //可以升级
+	                    var size = dat.size;
+	                    plus.nativeUI.confirm("检查到当前版本有最新更新("+size+")，下载升级？",
+	                        function(event){
+	                            if(event.index ==0){
+	                                //console.log('下载地址：'+"https://test.1zdz.cn/kcb/" + dat.url);
+	                                downWgt("https://test.1zdz.cn/kcb/" + dat.url); //下载更新版的地址
+	                            }                        
+	                        } ,'系统消息',['马上升级','下次再说']);                
+	                }
+				}
+	    	});
+	    	//通知小黑板
+	    	function getTongzhi(){
+	    		$.ajax({
+		        	type:"post",
+					url:"http://dl.1zdz.cn/getinfo.php",
+					data: {
+						ver: wgtVer,
+	                    },
+	                success: function(data){
+	                	var dat = JSON.parse(data);
+		                if(parseInt(dat.code)==1){
+		                	//有通知
+		                	var displayinfo = '<div class="mui-content-padded" style="border: dashed 2px white;padding: 5px;"><p style="font-size: 18px;">通知小黑板：</p><div><p style="text-indent: 2em;">'+dat.info+'</p></div></div>';
+		                	$('#displayinfo').empty();
+		                	$('#displayinfo').append(displayinfo);
+		                }
+		                else{
+		                	$('#displayinfo').empty();
+		                }
+					}
+		    	});
+	    	}
+	    	getTongzhi();
+	    	window.setInterval("getTongzhi()",20000);
+	        //将账号与密码保存到Localstore
+            function remPwd(){ 
+            	var id = document.getElementById("user-id").value;
+                var pwd = document.getElementById("user-pwd").value; 
+                localStorage.setItem("userid",id);
+                localStorage.setItem("userpwd",pwd);
+                plus.nativeUI.toast('储存成功！返回下拉刷新试试！',{duration:'long'}) ;
+            } 
+            function selServer(server){
+            	$("input[name=server]").each(function(){
+		            var ser = $(this).val();
+		            if(ser==server){
+		                $(this).attr("checked","checked");
+		            }else{
+		                $(this).removeAttr("checked");
+		            }
+			    });
+			    plus.nativeUI.toast('服务器切换成功！') ;
+            }
+            function renewServer(){
+            	var ser=$("input[name=server]:checked").val();
+            	localStorage.setItem("server",ser);
+            	selServer(ser);
+            }
+            selServer(Server);
+            //升级
+			//需要传递当前的版本
+			function checkUpdate(){
+				var wgtVer = parseFloat($('#wgtver').text());
+			    plus.nativeUI.showWaiting("检测更新...");
+			    $.ajax({
+		        	type:"post",
+					url:"https://test.1zdz.cn/kcb/update/update.php",
+					data: {
+						ver: wgtVer,
+	                    },
+	                success: function(data){
+	                	plus.nativeUI.closeWaiting();
+	                	var dat = JSON.parse(data);
+		                if(parseInt(dat.code)==1){                           
+		                    //可以升级
+		                    var size = dat.size;
+		                    plus.nativeUI.confirm("检查到当前版本有最新更新("+size+")，下载升级？",
+		                        function(event){
+		                            if(event.index ==0){
+		                                //console.log('下载地址：'+"https://test.1zdz.cn/kcb/" + dat.url);
+		                                downWgt("https://test.1zdz.cn/kcb/" + dat.url); //下载更新版的地址
+		                            }                        
+		                        } ,'系统消息',['马上升级','下次再说']);                
+		                }else{  
+		                    plus.nativeUI.toast("当前版本为最新版本！！");
+		                }
+					},error:function(){
+	                	plus.nativeUI.closeWaiting();
+			            plus.nativeUI.toast('检测更新失败！') ;
+			        }
+		    	});
+			};
+			// 下载wgt文件
+			
+			function downWgt(wgtUrl){
+			    plus.nativeUI.showWaiting("下载更新文件...");
+			    plus.downloader.createDownload( wgtUrl, {filename:"_doc/update/"}, function(d,status){
+			        if ( status == 200 ) { 
+			            //console.log("下载更新包成功："+d.filename);
+			            installWgt(d.filename); // 安装wgt包
+			        } else {
+			            //console.log("下载更新包失败！");
+			            plus.nativeUI.alert("下载更新失败！");
+			        }
+			        plus.nativeUI.closeWaiting();
+			    }).start();
+			};
+			// 更新应用资源  
+			function installWgt(path){
+			    plus.nativeUI.showWaiting("安装更新文件...");
+			    plus.runtime.install(path,{},function(){
+			        plus.nativeUI.closeWaiting();        
+			        plus.nativeUI.alert("应用资源更新完成！",function(){
+			            plus.runtime.restart();
+			        });
+			    },function(e){
+			        plus.nativeUI.closeWaiting();        
+			        plus.nativeUI.alert("安装更新更新包失败["+e.code+"]："+e.message);
+			    });
+			};
+            
+		</script>
+	</body>
+</html>

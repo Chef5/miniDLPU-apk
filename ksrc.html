@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<script src="js/jquery-3.2.1.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			th,td{
+				width: 20%;
+			}
+			td{
+				height: 100px;
+				text-align: center;
+			}
+			select{
+				width:auto;
+				background-color: #efeff4;
+			}
+			.ks-box-container{
+				width: 96%;
+				margin-left: 2%;
+				margin-right: 2%;
+				background-color: white;
+				padding-top:120px;
+			}
+			.mui-table-view:before,.mui-table-view:after {
+				height: 0px;
+			}
+		</style>
+
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">考试日程</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-fullscreen ks-box-container">
+				<ul class="mui-table-view" id="ks-box"> 
+					<div>
+						<p style="text-align: center;">
+							<img src="images/loadcj.gif" width="60%"/><br>
+							<font>考试日程加载中...</font>
+						</p>
+					</div>
+		    	</ul>
+			</div>
+		</div>
+		
+		<script>
+			var loading = '<div><p style="text-align: center;"><img src="images/loadcj.gif" width="60%"/><br><font>考试日程加载中...</font></p></div>';
+			var loaderror = '<div><p style="text-align: center;"><img src="images/meng.jpg" width="50%"/><br><h5 style="padding-left: 15%;padding-right: 15%;"><span style="color: lightskyblue;"><br><br>Sorry：教务处暂时没有考试日程数据，目前还无法抓取。此功能需要到期末有数据时才可以使用</span></h5></p></div>';
+			mui.init({
+				pullRefresh:{
+			    container:"#ks-box",
+			    down : {
+			      style:'circle',//必选，下拉刷新样式，目前支持原生5+ ‘circle’ 样式
+			      color:'#2BD009', //可选，默认“#2BD009” 下拉刷新控件颜色
+			      height:'50px',//可选,默认50px.下拉刷新控件的高度,
+			      range:'100px', //可选 默认100px,控件可下拉拖拽的范围
+			      offset:'45px', //可选 默认0px,下拉刷新控件的起始位置
+			      auto: false,//可选,默认false.首次加载自动上拉刷新一次
+			      callback :refresh
+			    	}
+			 	}
+			});
+			mui.plusReady(function() {
+				var Id = localStorage.getItem("userid"); 
+				var Pwd = localStorage.getItem("userpwd"); 
+		        if(Id == null) 
+		        { 
+					$("#ks-box").empty();
+					$("#ks-box").append(loaderror);
+		        } 
+			});
+			function isOver16(str){
+				if(str.length>16){
+					return str.substring(0,15)+"...";
+				}
+				else return str;
+			};
+			function refresh(){
+				var Id = localStorage.getItem("userid"); 
+				var Pwd = localStorage.getItem("userpwd"); 
+				if(Id == null) 
+		        { 
+		            mui("#ks-box").pullRefresh().endPulldown();
+		            mui.alert('本地不存在教务处账号和密码，请转到:设置>教务处信息更改');
+		            return ;
+		        } 
+				var items = "2018-2019-1";
+				$("#ks-box").empty();
+				$('#ks-box').append(loading);
+				$.ajax({
+					type:"post",
+					url:"https://test.1zdz.cn/kcb/ks.php",
+					data: {
+	                    item: items
+	                    },
+	                success: function(data){
+	                	$("#ks-box").empty();
+	                	var dat = JSON.parse(data);
+	                	
+	                 },
+	                error: function(){
+	                	$("#ks-box").empty();
+						$("#ks-box").append(loaderror);
+			            mui('#ks-box').pullRefresh().endPulldown();
+			        }
+				});
+				mui("#ks-box").pullRefresh().endPulldown();
+			}
+			onload:refresh();
+		</script>
+	</body>
+</html>
