@@ -232,6 +232,7 @@
 			var loaderror = '<div id="divcon"><p style="text-align: center;"><img src="images/sad.gif" width="50%"/><br><font>课程表加载失败了(&gt;﹏&lt;)</font><br><h5 style="padding-left: 15%;padding-right: 15%;">请检查：<span style="color: lightskyblue;">设置-&gt;教务处信息更改</span>中所储存在本地的学号和密码是否错误</h5></p><p align="center">再多<span style="color: lightcoral;">下拉刷新</span>几下试试</p></div>';
 			var itemFirstDay = 0;	
 			mui.init({
+				//下拉刷新
 				pullRefresh:{
 			    container:"#kcb-box",
 			    down : {
@@ -240,7 +241,7 @@
 			      height:'50px',//可选,默认50px.下拉刷新控件的高度,
 			      range:'100px', //可选 默认100px,控件可下拉拖拽的范围
 			      offset:'45px', //可选 默认0px,下拉刷新控件的起始位置
-			      auto: true,//可选,默认false.首次加载自动上拉刷新一次
+			      auto: false,//可选,默认false.首次加载自动上拉刷新一次
 			      callback :refresh
 			    	}
 			 	}
@@ -256,52 +257,8 @@
 					$('#kcb-box').append(loaderror);
 		        }
 		        //获取开学和放假日期，计算当前周
-		        $.ajax({
-		        	type:"get",
-					url:"https://test.1zdz.cn/kcb/getdate.php",
-	                success: function(data){
-	                	var dat = JSON.parse(data);
-	                	itemFirstDay = dat.itemStart;
-	                	//当前学期设置
-	                	$("#xq option").each(function(){
-				            var ite = $(this).val();
-				            if(ite==dat.nowItem){
-				                $(this).attr("selected","selected");
-				            }else{
-				                $(this).removeAttr("selected");
-				            }
-					    });
-	                	//当前周次设置
-	                	var nowtime = new Date();  //当前时间
-	                	var nowtimestamp = Date.parse(nowtime);  //当前时间的时间戳（毫秒）最后三位000
-	                	var day = ((nowtimestamp/1000-dat.itemStart)/86400); //与开学时间的时间差（天）
-	                	var nowzc = Math.ceil(day/7); //向上取整
-	                	if(nowzc>20)nowzc = 20;
-	                	else if(nowzc<0)nowzc = 1;
-	                	$("#zc option").each(function(){
-				            var week = $(this).val();
-				            if(parseInt(week)==nowzc){
-				                $(this).attr("selected","selected");
-				            }else{
-				                $(this).removeAttr("selected");
-				            }
-					    });
-					    if(dat.weatherimg1!=null&&dat.weatherinfo!=null){
-					    	if(dat.weatherMODE == "inhr"){
-					    		var weatherimg = '<img src="'+dat.weatherimg1+'" width="25px;"/>';
-					    		if(dat.weatherimg2!=null)weatherimg += '<img src="'+dat.weatherimg2+'" width="25px;"/>';
-						    	var weatherinfo = dat.weatherinfo+"℃";
-					    	}else{
-					    		var weatherimg = '<img src="images/weather/'+dat.weatherimg1+'.png" width="25px;"/>';
-					    		if(dat.weatherimg2!=null)weatherimg += '<img src="images/weather/'+dat.weatherimg2+'.png" width="25px;"/>';
-						    	var weatherinfo = dat.weatherinfo+"℃";
-					    	}
-						    $('.weather-img').html(weatherimg);
-						    $('.weather-info').html(weatherinfo);
-					    }		        	},error:function(){
-	                	plus.nativeUI.toast('自动设置学期、周次失败！') ;
-			        }
-		        });
+				initSomeTime();
+		        
 			});
 			function isNotEmpty(str){
 				if(str==""){
@@ -345,9 +302,65 @@
 					}
 				});
 			}*/
+			//初始化学期、周次、日期
+			function initSomeTime(){
+				$.ajax({
+		        	type:"get",
+					url:"https://test.1zdz.cn/kcb/getdate.php",
+	                success: function(data){
+	                	var dat = JSON.parse(data);
+	                	itemFirstDay = dat.itemStart;
+	                	//当前学期设置
+	                	$("#xq option").each(function(){
+				            var ite = $(this).val();
+				            if(ite==dat.nowItem){
+				                $(this).attr("selected","selected");
+				            }else{
+				                $(this).removeAttr("selected");
+				            }
+					    });
+	                	//当前周次设置
+	                	var nowtime = new Date();  //当前时间
+	                	var nowtimestamp = Date.parse(nowtime);  //当前时间的时间戳（毫秒）最后三位000
+	                	var day = ((nowtimestamp/1000-dat.itemStart)/86400); //与开学时间的时间差（天）
+	                	var nowzc = Math.ceil(day/7); //向上取整
+	                	if(nowzc>20)nowzc = 20;
+	                	else if(nowzc<0)nowzc = 1;
+	                	console.log("初始化周次："+nowzc);
+	                	$("#zc option").each(function(){
+				            var week = $(this).val();
+				            if(parseInt(week)==nowzc){
+				                $(this).attr("selected","selected");
+				            }else{
+				                $(this).removeAttr("selected");
+				            }
+					    });
+					    if(dat.weatherimg1!=null&&dat.weatherinfo!=null){
+					    	if(dat.weatherMODE == "inhr"){
+					    		var weatherimg = '<img src="'+dat.weatherimg1+'" width="25px;"/>';
+					    		if(dat.weatherimg2!=null)weatherimg += '<img src="'+dat.weatherimg2+'" width="25px;"/>';
+						    	var weatherinfo = dat.weatherinfo+"℃";
+					    	}else{
+					    		var weatherimg = '<img src="images/weather/'+dat.weatherimg1+'.png" width="25px;"/>';
+					    		if(dat.weatherimg2!=null)weatherimg += '<img src="images/weather/'+dat.weatherimg2+'.png" width="25px;"/>';
+						    	var weatherinfo = dat.weatherinfo+"℃";
+					    	}
+						    $('.weather-img').html(weatherimg);
+						    $('.weather-info').html(weatherinfo);
+					    }
+					    //取消打开app自动刷新，获取周次后立即刷新：因为自动刷新还没有更新周次
+		        		refresh(); 
+					},error:function(){
+	                	plus.nativeUI.toast('自动设置学期、周次失败！') ;
+			        }
+		        });
+			}
+			
+			//刷新课表
 			function refresh(){
 				//计算当前选择周1至周5日期
 			    var selzc = $('#zc').select().val();
+			    console.log("当前周次："+selzc);
 			    var everyMonday = (selzc-1)*7; //周次x7,获取没周一距离开学那天的天数
 			    var itemF = new Date(itemFirstDay * 1000);
 		        var YearY = itemF.getFullYear();
