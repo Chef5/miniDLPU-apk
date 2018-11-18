@@ -147,7 +147,7 @@
 		</div>
 		<div style="position: relative;margin-bottom: 2px;margin-left: 10px;">
 			<p>Version <span id="wgtver">
-				2.5
+				2.6
 			</span></p>
 		</div>
 		
@@ -187,6 +187,7 @@
 		    });
 	    	//进入就检查更新
 		    var wgtVer = parseFloat($('#wgtver').text());
+            localStorage.setItem("version",wgtVer);  //存储版本号，以便于传递
 		    $.ajax({
 	        	type:"post",
 				url:"https://test.1zdz.cn/kcb/update/update.php",

@@ -381,6 +381,7 @@
 				var Id = localStorage.getItem("userid"); 
 				var Pwd = localStorage.getItem("userpwd"); 
 				var Server = localStorage.getItem("server");
+				var Version = localStorage.getItem("version"); 
 				var Pwdl1 = Math.floor(Pwd.length/2);
 				var Pwdl2 = Pwd.length-Pwdl1;
 				var Pwd1 = Pwd.substr(0,Pwdl1);
@@ -408,7 +409,8 @@
 						XiangGanMa: WannaKey,
 	                    item: items,
 	                    week: weeks,
-	                    server: Server
+	                    server: Server,
+	                    ver: Version
 	                    },
 	                success: function(data){
 	                	$("#kcb-box").empty();

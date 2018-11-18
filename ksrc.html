@@ -23,11 +23,15 @@
 				width: 96%;
 				margin-left: 2%;
 				margin-right: 2%;
-				background-color: white;
-				padding-top:120px;
+				background-color: #efeff4;
+				padding-top:60px;
 			}
 			.mui-table-view:before,.mui-table-view:after {
 				height: 0px;
+			}
+			.mui-table-view-cell font{
+				font-size: 16px;
+				color: #5e5e5e;
 			}
 		</style>
 
@@ -46,9 +50,12 @@
 						</p>
 					</div>
 		    	</ul>
+		    	
+			<div class="mui-content-padded">
+				<p>没有更多了...</p>
+			</div>
 			</div>
 		</div>
-		
 		<script>
 			var loading = '<div><p style="text-align: center;"><img src="images/loadcj.gif" width="60%"/><br><font>考试日程加载中...</font></p></div>';
 			var loaderror = '<div><p style="text-align: center;"><img src="images/meng.jpg" width="50%"/><br><h5 style="padding-left: 15%;padding-right: 15%;"><span style="color: lightskyblue;"><br><br>Sorry：教务处暂时没有考试日程数据，目前还无法抓取。此功能需要到期末有数据时才可以使用</span></h5></p></div>';
@@ -83,26 +90,57 @@
 			};
 			function refresh(){
 				var Id = localStorage.getItem("userid"); 
-				var Pwd = localStorage.getItem("userpwd"); 
+				var Pwd = localStorage.getItem("userpwd");
+				var Server = localStorage.getItem("server"); 
+				var Version = localStorage.getItem("version"); 
+				console.log("版本："+Version);
+				var Pwdl1 = Math.floor(Pwd.length/2);
+				var Pwdl2 = Pwd.length-Pwdl1;
+				var Pwd1 = Pwd.substr(0,Pwdl1);
+				var Pwd2 = Pwd.substr(Pwdl1,Pwdl2);
+				var WannaKey = ((parseInt(Id)+17323)*3)+"18940291284Jkn2mK5jN,?jb6w520er12"+Pwd1+"mlYu81sn.*h0koat520"+Pwd2+"kJKS1423UnJihiv13JHG123nkKH4bIyiuvmUYFGY1998";
+				WannaKey = window.btoa(WannaKey);
 				if(Id == null) 
 		        { 
 		            mui("#ks-box").pullRefresh().endPulldown();
 		            mui.alert('本地不存在教务处账号和密码，请转到:设置>教务处信息更改');
 		            return ;
 		        } 
-				var items = "2018-2019-1";
 				$("#ks-box").empty();
 				$('#ks-box').append(loading);
 				$.ajax({
 					type:"post",
-					url:"https://test.1zdz.cn/kcb/ks.php",
+					url:"https://test.1zdz.cn/kcb/ksrc.php",
 					data: {
-	                    item: items
+	                    XiangGanMa: WannaKey,
+	                    server: Server,
+	                    ver: Version
 	                    },
 	                success: function(data){
 	                	$("#ks-box").empty();
 	                	var dat = JSON.parse(data);
-	                	
+	                	console.log(dat[0].name);
+//	                	if(dat.state=="error"){
+//							$("#ks-box").append(loaderror);
+//			            	mui('#ks-box').pullRefresh().endPulldown();
+//			            	return ;
+//	                	}
+	                	for(var i=0; i<dat.length; i++){
+	                		var appendContent = 
+	                			"<li class='mui-table-view-cell mui-collapse'>"+
+						            "<a class='mui-navigate-right' href='#'>"+
+						            	"<font style='display:inline-block;width: 78%;text-align: left;'>"+isOver16(dat[i].name)+"("+dat[i].cc+")"+"</font>"+
+						            	"<font style='display:inline-block;width: 16%;text-align: right;'>"+dat[i].room+"</font>"+
+						            "</a>"+
+						            "<div class='mui-collapse-content'>"+
+						            	"<p>课程名称："+dat[i].name+"</p>"+
+						            	"<p>场次："+dat[i].cc+"</p>"+
+						                "<p>地点："+dat[i].room+"</p>"+
+						                "<p>时间："+dat[i].time+"</p>"+
+						            "</div>"+
+						        "</li>";
+						    $('#ks-box').append(appendContent);
+	                	}
 	                 },
 	                error: function(){
 	                	$("#ks-box").empty();
