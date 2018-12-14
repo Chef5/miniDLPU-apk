@@ -21,7 +21,8 @@
 			}
 			#cj-box-container{
 				width: 96%;
-				height: 300px;
+				/*height: 300px;*/
+				height: auto;
 				margin-left: 2%;
 				margin-right: 2%;
 				background-color: white;
@@ -161,10 +162,11 @@
 						            	"<font style='display:inline-block;width: 78%;text-align: left;'>"+isOver16(dat[i].name)+"</font>"+
 						            	"<font style='display:inline-block;width: 16%;text-align: right;'>"+dat[i].grade+"</font>"+
 						            "</a>"+
-						            "<div class='mui-collapse-content'>"+
-						            	"<p>平时成绩(<font>"+dat[i].detail.pscjb+"</font>)："+dat[i].detail.pscj+"</p>"+
-						            	"<p>期末成绩(<font>"+dat[i].detail.qmcjb+"</font>)："+dat[i].detail.qmcj+"</p>"+
-						            	"<hr />"+
+						            "<div class='mui-collapse-content'>"+"<p>总成绩："+dat[i].grade+"</p>";
+						    if(dat[i].detail.pscjb!='')appendContent+="<p>平时成绩(<font>"+dat[i].detail.pscjb+"</font>)："+dat[i].detail.pscj+"</p>";
+						    if(dat[i].detail.qzcjb!='0%'&&dat[i].detail.qzcjb!='')appendContent+="<p>期中成绩(<font>"+dat[i].detail.qzcjb+"</font>)："+dat[i].detail.qzcj+"</p>";
+						    if(dat[i].detail.pscjb!='')appendContent+="<p>期末成绩(<font>"+dat[i].detail.qmcjb+"</font>)："+dat[i].detail.qmcj+"</p>";
+						    appendContent+="<hr />"+
 						                "<p><font>学分："+dat[i].detail.credit+"</font>&nbsp;&nbsp;&nbsp;&nbsp;<font>绩点："+dat[i].detail.point+"</font></p>"+
 						                "<p>学时："+dat[i].detail.hour+"</p>"+
 						                "<p>考核方式："+dat[i].detail.method+"</p>"+

@@ -147,7 +147,7 @@
 		</div>
 		<div style="position: relative;margin-bottom: 2px;margin-left: 10px;">
 			<p>Version <span id="wgtver">
-				2.6
+				2.7
 			</span></p>
 		</div>
 		
@@ -200,7 +200,7 @@
 	                if(parseInt(dat.code)==1){                           
 	                    //可以升级
 	                    var size = dat.size;
-	                    plus.nativeUI.confirm("检查到当前版本有最新更新("+size+")，下载升级？",
+	                    plus.nativeUI.confirm("检查到当前版本有最新更新("+size+")，下载升级？"+dat.newinfo,
 	                        function(event){
 	                            if(event.index ==0){
 	                                //console.log('下载地址：'+"https://test.1zdz.cn/kcb/" + dat.url);
