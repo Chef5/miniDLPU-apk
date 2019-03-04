@@ -3,7 +3,8 @@
     "resources": [
       "a.html",
       "page/kcb.html",
-      "kcb.html"
+      "kcb.html",
+      "cj.html"
     ],
     "refer": [
       "a.html",
