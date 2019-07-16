@@ -1,5 +1,16 @@
 # 下载地址
   下载地址：[http://download.1zdz.cn](http://download.1zdz.cn)
+
+# 效果预览
+![image](https://raw.githubusercontent.com/wiki/Patrick-Jun/miniDLPU-apk/img.png)
+
+# 页面组成
+
+- **课程表**：kcb.html
+- **成绩**：cj.html
+- **考试日程**：ksrc.html
+- **设置**：setting.html
+
 # 更新记录
 ### v1.0
 - 个人定制版，账号密码打包软件内
