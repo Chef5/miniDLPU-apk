@@ -9,7 +9,7 @@
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<style>
 			th{
-				width: 20%;
+				width: 62px;
 				color: white;
 				height: 36px;
 				padding-top: 10px;
@@ -19,18 +19,18 @@
 				/*background-color: #2AC845;*/
 				background-color: #ACACB4;
 			}
+			td{
+				width: 62px;
+				margin: 10px;
+				border-right: 5px #efeff4 solid;
+				border-top: 5px #efeff4 solid;
+			}
 			.showtime{
 				display: block;
 				position: relative;
 				font-size: 9px;
 				margin-top: 13px;
 				font-weight: normal;
-			}
-			td{
-				width: 20%;
-				margin: 10px;
-				border-right: 5px #efeff4 solid;
-				border-top: 5px #efeff4 solid;
 			}
 			.firstTh,.firstTd{
 				width: 1px;
@@ -47,17 +47,19 @@
 				background-color: #efeff4;
 			}
 			#kcb-box{
-				width: 97%;
+				/* width: 97%; */
 				/*height: 300px;*/
+				/* width: 1500px; */
 				height: auto;
-				margin-right: 4%;
+				/* margin-right: 4%; */
 				background-color: #efeff4;
 			}
 			#divcon{
-				width: 100%;
+				/* width: 100%; */
 				/*height: 300px;*/
+				/* width: 1500px; */
 				height: auto;
-				margin-left: 2%;
+				/* margin-left: 2%; */
 				background-color: white;
 			}
 			.emptyTd{
@@ -112,34 +114,25 @@
 		.flipper{
 		    position: relative;
 		    height: 95px;
-		   	width: 100%;
+		   	/* width: 100%; */
+		   	width: 62px;
 		    transition: 0.6s;
 		    transform-style: preserve-3d; /*重要*/
 		}
 		/* 触发翻转 */
 		.flip-container:hover .flipper{
 		    height: 95px;
-		   	width: 100%;
+		   	/* width: 100%; */
+		   	width: 62px;
 		    transform: rotateX(180deg);
 			-moz-transform:rotateX(180deg);  
 		}
-		/*.turnon{
-			height: 95px;
-		   	width: 100%;
-		    transform: rotateX(180deg);
-			-moz-transform:rotateX(180deg); 
-		}
-		.turnoff{
-			height: 95px;
-		   	width: 100%;
-		    transform: rotateX(180deg);
-			-moz-transform:rotateX(180deg); 
-		}*/
 		.front ,.back{
 		    position: absolute;
 		    backface-visibility: hidden;  /*重要*/
 		    height: 95px;
-		   	width: 100%;
+		   	/* width: 100%; */
+		   	width: 62px;
 			text-align: center;
 			color: white;
 		}
@@ -183,9 +176,9 @@
 				<div>
 					学期：
 					<select name='xq' id="xq" onchange="refresh()" style="margin-left: -10px;">
-						<option selected="selected">2018-2019-1</option>
+						<option>2018-2019-1</option>
 						<option>2018-2019-2</option>
-						<option>2019-2020-1</option>
+						<option selected="selected">2019-2020-1</option>
 						<option>2019-2020-2</option>
 						<option>2020-2021-1</option>
 						<option>2020-2021-2</option>
@@ -220,11 +213,16 @@
 						<span class="weather-info"></span>
 				</div>
 			</div>
-			<div id="kcb-box">
-				<div id="divcon">
-						
-				</div>
-			</div>
+			<!-- 
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll"> -->
+					<div id="kcb-box">
+						<div id="divcon">
+								
+						</div>
+					</div>
+				<!-- </div>
+			</div> -->
 		</div>
 		<script>
 			var loading = '<div id="divcon"><p style="text-align: center;"><img src="images/loadcj.gif" width="60%"/><br><font>课程表加载中...</font></p><p style="text-align: center;">超过5秒都加载不出来，切换一下服务器试试</p></div>';
@@ -260,6 +258,18 @@
 				initSomeTime();
 		        
 			});
+			//滚动视图设置
+			// mui('.mui-scroll-wrapper').scroll({
+			// 	scrollY: false, //是否竖向滚动
+			// 	scrollX: true, //是否横向滚动
+			// 	startX: 0, //初始化时滚动至x
+			// 	startY: 0, //初始化时滚动至y
+			// 	indicators: true, //是否显示滚动条
+			// 	deceleration:0.0005, //阻尼系数,系数越小滑动越灵敏
+			// 	bounce: true //是否启用回弹
+			// });
+			
+			
 			function isNotEmpty(str){
 				if(str==""){
 					return false;
@@ -285,23 +295,6 @@
 		        var num = Min + Math.round(Rand * Range); //四舍五入
 		        return num;
 			}
-			//翻转效果
-			/*function turn(){
-				$(".flipper").click(function(){
-					if($(this).parent().attr("val")=="hidden"){
-						$(this).parent().attr("val","show");
-						$(this).parent().addClass("turnon");  
-						$(this).addClass("turnon"); 
-						return;
-					}
-					if($(this).parent().attr("val")=="show"){
-						$(this).parent().attr("val","hidden");
-						$(this).parent().addClass("turnoff");
-						$(this).addClass("turnoff"); 
-						return; 
-					}
-				});
-			}*/
 			//初始化学期、周次、日期
 			function initSomeTime(){
 				$.ajax({
@@ -370,7 +363,7 @@
             	var firstDayTime = new Date(YearY+"-"+MonthM+"-"+DayD+" 00:00:00");
             	var firstDayTime = firstDayTime.valueOf();
             	var toDisplayTime = new Array();
-            	for(var i=0;i<5;i++){
+            	for(var i=0;i<7;i++){
             		var nextDate = new Date(firstDayTime + (everyMonday+i)*24*60*60*1000); //后一天
             		var nextMonth = nextDate.getMonth()+1 < 10 ? '0'+(nextDate.getMonth()+1) : nextDate.getMonth()+1;
 		        	var nextDay = nextDate.getDate() < 10 ? '0'+nextDate.getDate() : nextDate.getDate();
@@ -397,6 +390,8 @@
 		        } 
 				var items = $('#xq').select().val();
 				var weeks = $('#zc').select().val();
+//				console.log(weeks);
+				console.log(WannaKey);
 				/*items = "2018-2019-1";
 				weeks = "1";*/
 				$("#kcb-box").empty();
@@ -423,11 +418,11 @@
 	                	}
 	                	var index = 1;
 			            for(var hang=0;hang<6;hang++){
-			                for(var i=0;i<5;i++){
+			                for(var i=0;i<7;i++){
 			                    if(dat[hang][i].name!="" && dat[hang][i].index == ""){
 			                    	var tmp_name = dat[hang][i].name;
 			                        for(var h=hang;h<6;h++){//向下搜寻相同课程，名称
-			                            for(var j=0;j<5;j++){
+			                            for(var j=0;j<7;j++){
 			                                if(dat[h][j].name == tmp_name && dat[h][j].index == ""){
 			                                    dat[h][j].index = index;//标号
 			                                }
@@ -441,18 +436,18 @@
 	                	var isAllNot = 0;
 						var tdColor = new Array('td1','td2','td3','td4','td5','td6','td7','td8','td9','td10');
 						var tdContent = "<td class='firstTd'>1<br>2</td>";
-						var appendKCBcontent = "<table><tr><th class='firstTh'></th><th>周一<br><span class='showtime'>"+toDisplayTime[0]+"</span></th><th>周二<br><span class='showtime'>"+toDisplayTime[1]+"</span></th><th>周三<br><span class='showtime'>"+toDisplayTime[2]+"</span></th><th>周四<br><span class='showtime'>"+toDisplayTime[3]+"</span></th><th>周五<br><span class='showtime'>"+toDisplayTime[4]+"</span></th></tr>";
+						var appendKCBcontent = "<table><tr><th class='firstTh'></th><th>周一<br><span class='showtime'>"+toDisplayTime[0]+"</span></th><th>周二<br><span class='showtime'>"+toDisplayTime[1]+"</span></th><th>周三<br><span class='showtime'>"+toDisplayTime[2]+"</span></th><th>周四<br><span class='showtime'>"+toDisplayTime[3]+"</span></th><th>周五<br><span class='showtime'>"+toDisplayTime[4]+"</span></th><th>周六<br><span class='showtime'>"+toDisplayTime[5]+"</span></th><th>周日<br><span class='showtime'>"+toDisplayTime[6]+"</span></th></tr>";
 						var tmpcolor = "";
 						var tmpname = "";
 						var tmproom = "";
 						var tmpleader = "";
 						var tmpsmile = "";
 						var smiles = dat.smilelen-1;
-						console.log(smiles);
+						// console.log(smiles);
 						var tmptime = "<div class='tdtime'>08:00~08:45<br/>08:55~09:40</div>";
 						for(hang=0;hang<5;hang++){
-		                	for(var i=0;i<5;i++){
-	                			tmpcolor = tdColor[dat[hang][i].index-1];
+		                	for(var i=0;i<7;i++){
+	                			tmpcolor = tdColor[(dat[hang][i].index-1) % tdColor.length];
 	                			tmpname = isOver12(dat[hang][i].name);
 	                			tmproom = dat[hang][i].room;
 	                			tmpleader = isOver16(dat[hang][i].leader);

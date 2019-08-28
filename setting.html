@@ -54,20 +54,21 @@
 					<a class="mui-navigate-right" href="#">教务处服务器选择</a>
 					<div class="mui-collapse-content">
 						<form class="mui-input-group" onchange="renewServer()">
+							<p>&emsp;&emsp;此处切换服务器只是选择访问教务处的哪台服务器，非本程序运行服务器。本程序运行服务器仅1台（微信小程序2号服务器），若程序无法正常使用，可以微信小程序查看服务器状态。</p>
 							<div class="mui-input-row mui-radio">
-								<label>服务器1：<span style="color: lawngreen;">210.30.62.37</span><span></span>(默认)</label>
+								<label>教务处1：<span style="color: lawngreen;">210.30.62.37</span><span></span>(默认)</label>
 								<input name="server" type="radio" value="210.30.62.37">
 							</div> 
 							<div class="mui-input-row mui-radio">
-								<label>服务器2：<span style="color: lawngreen;">210.30.62.38</span><span></span></label>
+								<label>教务处2：<span style="color: lawngreen;">210.30.62.38</span><span></span></label>
 								<input name="server" type="radio" value="210.30.62.38">
 							</div> 
 							<div class="mui-input-row mui-radio">
-								<label>服务器3：<span style="color: lawngreen;">210.30.62.39</span><span></span></label>
+								<label>教务处3：<span style="color: lawngreen;">210.30.62.39</span><span></span></label>
 								<input name="server" type="radio" value="210.30.62.39">
 							</div>  
 							<div class="mui-input-row mui-radio">
-								<label>服务器4：<span style="color: lawngreen;">210.30.62.40</span><span></span></label>
+								<label>教务处4：<span style="color: lawngreen;">210.30.62.40</span><span></span></label>
 								<input name="server" type="radio" value="210.30.62.40">
 							</div> 
 						</form><br>
@@ -130,7 +131,7 @@
 									<p style="font-size: 16px;">QQ:<font style="color: lightskyblue;">583195863</font>（枯艿）</p>
 									<p style="font-size: 16px;">微信:<font style="color: lightskyblue;">Kmitle</font>（Patrick Jun）</p>
 								</div>
-								<h5 align="center" style="font-size: 12px;color: lightcoral;">有问题一定要告诉我啊</h5>
+								<h5 align="center" style="font-size: 12px;color: lightcoral;">反馈是解决问题最好的方法</h5>
 							</div>
 							<!--页脚，放置补充信息或支持的操作-->
 							<div class="mui-card-footer">
@@ -146,8 +147,9 @@
 			
 		</div>
 		<div style="position: relative;margin-bottom: 2px;margin-left: 10px;">
+			<p>微信小程序：工大教务处</p>
 			<p>Version <span id="wgtver">
-				2.9
+				3.0
 			</span></p>
 		</div>
 		
@@ -156,6 +158,8 @@
 			var Id = localStorage.getItem("userid"); 
 			var Pwd = localStorage.getItem("userpwd"); 
 			var Server = localStorage.getItem("server"); 
+			// Id = '';
+			// Pwd = '';
 			if(Server == null){
 				localStorage.setItem("server","210.30.62.37");
 				Server = "210.30.62.37";
